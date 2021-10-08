@@ -1,0 +1,68 @@
+// config
+$main_color: #e20013;
+// $text_yellow: #FAC64C;
+$black: #555;
+$text_color: #EEE;
+// $icon_black: #999;
+// $clicking_gray: #F3F3F3;
+// $background_blue: #fafeff;
+$screen_side: 10px;
+// $navSize: 45px;
+// $board_border: 1px solid #eee;
+// $board_shadow: 0 1px 3px rgba(27, 14, 14, 0.1);
+// $lightbox_background: rgba(0,0,0,.5);
+@mixin flexbox($direction, $justify-content, $align-items) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+}
+.t{
+    box-shadow: 0px 0px 3px #F33 inset;
+}
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    font-size: 20px;
+    list-style: none;
+    font-weight: 300;
+    border-radius: 0;
+    line-height: 22px;
+    border-spacing: 0;
+    letter-spacing: 1px;
+    color: $text_color;
+    box-sizing: border-box;
+    background-size: cover;
+    vertical-align: baseline;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: '微軟正黑體', 'Noto Sans TC';
+    -webkit-tap-highlight-color: transparent;
+}
+a:link, a:visited, a:hover, a:active{
+    color: $text_color;
+    text-decoration: none;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    box-shadow:0 0 0 60px #FFF inset;
+}
+
+.container{
+    width: 100%;
+    margin: 0 auto;
+    padding-left: $screen_side;
+    padding-right: $screen_side;
+}
+html{
+	width: 100%;
+	overflow-x: hidden;
+    body{
+        width: 100%;
+        background-color: #000;
+        overflow-x: hidden;
+    }
+}

@@ -1,0 +1,532 @@
+@import 'main.scss';
+// #app {
+//     font-family: Avenir, Helvetica, Arial, sans-serif;
+//     -webkit-font-smoothing: antialiased;
+//     -moz-osx-font-smoothing: grayscale;
+//     text-align: center;
+//     color: #2c3e50;
+// }
+@keyframes icon_beforeTag {
+    50%{
+        top: 27px;
+        transform: rotateZ(0deg);
+    }
+    100%{
+        top: 27px;
+        transform: rotateZ(45deg);
+    }
+}
+@keyframes icon_afterTag {
+    50%{
+        top: 27px;
+        transform: rotateZ(0deg);
+    }
+    100%{
+        top: 27px;
+        transform: rotateZ(-45deg);
+    }
+}
+html{
+    body{
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        padding: 0 $screen_side;
+        main{
+            .calendar{
+                width: 100%;
+                padding: 15px 0;
+                @include flexbox(column, flex-start, flex-start);
+                .title{
+                    padding-left: 15px;
+                    @include flexbox(column, flex-start, flex-start);
+                    span{
+                        font-weight: 600;
+                        &:nth-of-type(1){
+                            opacity: .2;
+                            color: #FFF;
+                            font-size: 70px;
+                            line-height: 64px;
+                            letter-spacing: 7px;
+                            display: inline-block;
+                        }
+                        &:nth-of-type(2){
+                            font-size: 60px;
+                            margin-top: -14px;
+                            padding-left: 30px;
+                            color: $main_color;
+                            letter-spacing: 0px;
+                            transform: scaleX(.8);
+                            transform-origin: left;
+                        }
+                    }
+                }
+                ol{
+                    $daySize: 40px;
+                    width: 100%;
+                    @include flexbox(row, flex-start, center);
+
+                    li{
+                        font-weight: 600;
+                        font-size: 18px;
+                        width: $daySize;
+                        border: 2px solid #000;
+                        height: $daySize;
+                        text-align: center;
+                        display: inline-block;
+                        line-height: $daySize - 2px;
+                        ~li{
+                            margin-left: calc((100% - ($daySize * 7)) / 6);
+                        }
+                    }
+                    &.week{
+                        padding-top: 30px;
+                        border-bottom: 1px solid #AAA;
+                        li{
+                            ~li{
+
+                            }
+                        }
+                    }
+                    &.month{
+                        flex-wrap: wrap;
+                        li{
+                            border-radius: 50%;
+                            margin-top: 10px;
+                            position: relative;
+                            transition: .2s;
+                            ~li{
+
+                            }
+                            &:nth-of-type(7n+1){
+                                margin-left: 0;
+                            }
+                            &.today{
+                                background-color: #FFF;
+                                border-color: #FFF;
+                                color: $main_color;
+                            }
+                            &.event{
+                                &:before{
+                                    content: '';
+                                    display: inline-block;
+                                    position: absolute;
+                                    right: -1px;
+                                    bottom: -1px;
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: $main_color;
+                                }
+                            }
+                            &.selectDay{
+                                border-color: $main_color;
+                            }
+                        }
+                    }
+                }
+            }
+            .tasksQuantity{
+                margin-top: 20px;
+                position: relative;
+                height: 60px;
+                font-weight: 600;
+                transform-origin: left;
+                transform: scaleX(.8);
+                font-size: 40px;
+                line-height: 40px;
+                display: inline-block;
+                &:after{
+                    content: '';
+                    display: inline-block;
+                    margin-left: 20px;
+                    cursor: pointer;
+                    border-right: 0px solid transparent;
+                    border-top: 8px solid transparent;
+                    border-left: 16px solid $main_color;
+                    border-bottom: 8px solid transparent;
+                    margin-bottom: 6px;
+                }
+            }
+            .lightbox{
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,.5);
+                padding: 15px;
+                opacity: 0;
+                transition: .3s;
+                pointer-events: none;
+                &.list{
+                    .container{
+                        overflow: hidden;
+                        border-radius: 4px;
+                        height: calc(100% - 60px - 15px);
+                        background-color: #FFF;
+                        padding: 15px 15px 0;
+                        position: relative;
+                        @include flexbox(column, flex-start, flex-start);
+                        h2{
+                            letter-spacing: 0;
+                            font-weight: 600;
+                            line-height: 50px;
+                            font-size: 50px;
+                            color: #CCC;
+                            height: 50px;
+                        }
+                        ul{
+                            padding: 15px $screen_side 15px;
+                            // padding-bottom: 50px;
+                            // height: 100%;
+                            flex: 1;
+                            overflow: auto;
+                            padding-left: 15px;
+                            @include flexbox(column, flex-start, flex-start);
+                            li{
+                                width: 100%;
+                                $lineSize: 36px;
+                                height: $lineSize;
+                                position: relative;
+                                @include flexbox(row, flex-start, center);
+                                ~li{
+                                    border-top: 1px solid #EEE;
+                                }
+                                // font-size: 18px;
+                                >div{
+                                    width: $lineSize;
+                                    height: $lineSize;
+                                    span{
+                                        width: 20px;
+                                        height: 20px;
+                                        position: relative;
+                                        display: inline-block;
+                                        &:before, &:after{
+                                            content: '';
+                                            position: absolute;
+                                            display: inline-block;
+                                        }
+                                    }
+                                    &.checkbox{
+                                        @include flexbox(row, flex-start, center);
+                                        span{
+                                            border-radius: 4px;
+                                            border: 2px solid $black;
+                                            &:before, &:after{
+                                                content: '';
+                                                position: absolute;
+                                                display: inline-block;
+                                                background-color: #ccc;
+                                                opacity: 0;
+                                            }
+                                            &:before{
+                                                width: 2px;
+                                                height: 8px;
+                                                left: 2px;
+                                                top: 7px;
+                                                transform: rotateZ(-30deg);
+                                            }
+                                            &:after{
+                                                width: 16px;
+                                                height: 2px;
+                                                left: 2px;
+                                                top: 7px;
+                                                transform: rotateZ(-47deg);
+                                            }
+                                        }
+                                    }
+                                    &.remove{
+                                        opacity: 0;
+                                        pointer-events: none;
+                                        @include flexbox(row, center, center);
+                                        span{
+                                            transform: rotateZ(45deg);
+                                            border-radius: 50%;
+                                            background-color: $main_color;
+                                            &:before, &:after{
+                                                top: 9px;
+                                                left: 5px;
+                                                width: 10px;
+                                                height: 2px;
+                                                border-radius: 2px;
+                                                background-color: #FFF;
+                                            }
+                                            &:before{
+                                                transform: rotateZ(90deg);
+                                            }
+                                        }
+                                        &.show{
+                                            opacity: 1;
+                                            pointer-events: auto;
+                                        }
+                                    }
+                                    
+                                }
+                                input{
+                                    height: 100%;
+                                    line-height: 21px;
+                                    padding-left: 5px;
+                                    color: $black;
+                                    flex: 1;
+                                }
+                                &.done{
+                                    >.checkbox{
+                                        opacity: .5;
+                                        span{
+                                            &:before, &:after{
+                                                opacity: 1;
+                                            }
+                                        }
+                                    }
+                                    input{
+                                        opacity: .5;
+                                    }
+                                    &:after{
+                                        content: '';
+                                        display: inline-block;
+                                        width: calc(100% - (36px * 2));
+                                        position: absolute;
+                                        height: 1px;
+                                        background-color: #ddd;
+                                        left: 30px;
+                                        top: 17px;
+                                    }
+                                }
+                            }
+                        }
+                        >div{
+                            // position: absolute;
+                            // left: 0;
+                            // bottom: 0;
+                            margin-left: -15px;
+                            width: calc(100% + 30px);
+                            height: 50px;
+                            line-height: 50px;
+                            font-weight: 600;
+                            background-color: #F6F6F6;
+                            text-align: center;
+                            color: $main_color;
+                        }
+                    }
+                }
+                &.show{
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+            .add_tasks{
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                pointer-events: none;
+                background-color: $main_color;
+                @include flexbox(row, center, center);
+                .container{
+                    width: 100%;
+                    height: 100%;
+                    padding-top: 60px;
+                    padding-bottom: 15px;
+                    h2{
+                        font-size: 40px;
+                        font-weight: 600;
+                    }
+                    $daySize: 46px;
+                    .select_date{
+                        width: 100%;
+                        @include flexbox(column, flex-start, flex-start);
+                        ol{
+                            // width: 100%;
+                            width: #{$daySize * 7 - 6px};
+                            @include flexbox(row, flex-start, center);
+                            li{
+                                font-weight: 600;
+                                font-size: 20px;
+                                width: $daySize;
+                                height: $daySize;
+                                text-align: center;
+                                display: inline-block;
+                                line-height: $daySize;
+                                ~li{
+                                    margin-left: -1px;
+                                }
+                            }
+                            &.week{
+                                padding-top: 30px;
+                                li{
+                                    ~li{
+        
+                                    }
+                                }
+                            }
+                            &.month{
+                                flex-wrap: wrap;
+                                li{
+                                    border: 1px solid #FFF;
+                                    position: relative;
+                                    ~li{
+        
+                                    }
+                                    &.null{
+                                        border-color: transparent;
+                                    }
+                                    &:nth-of-type(7n+1){
+                                        margin-left: 0;
+                                    }
+                                    &:nth-of-type(7)~li{
+                                        margin-top: -1px;
+                                    }
+                                    &.select{
+                                        color: $main_color;
+                                        background-color: #FFF;
+                                    }
+                                    &.today{
+                                        position: relative;
+                                        &:before{
+                                            content: '';
+                                            display: inline-block;
+                                            position: absolute;
+                                            width: 0;
+                                            height: 0;
+                                            border-right:   5px solid #FFF;
+                                            border-top:     5px solid transparent;
+                                            border-left:    5px solid transparent;
+                                            border-bottom:  5px solid #FFF;
+                                            right: 1px;
+                                            bottom: 1px;
+                                        }
+                                        &.select{
+                                            &:before{
+                                                border-right-color: $main_color;
+                                                border-bottom-color: $main_color;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    input{
+                        width: #{$daySize * 7 - 6px};
+                        height: 36px;
+                        margin-top: 60px;
+                        padding: 2px 12px;
+                        border: 1px solid #FFF;
+                        background-color: $main_color;
+                        &::placeholder{
+                            color: #FFF;
+                            opacity: .5;
+                        }
+                    }
+                }
+                &.show{
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+        }
+        .btns{
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            position: fixed;
+            pointer-events: none;
+            // height: $navSize;
+            @include flexbox(row, flex-end, center);
+            >div{
+                pointer-events: auto;
+                position: relative;
+                // bottom: 15px;
+                margin-right: 15px;
+                margin-bottom: 15px;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                &.add{
+                    border-radius: 50%;
+                    border: 2px solid $main_color;
+                    background-color: $main_color;
+                    // right: calc(7px + 60px + 7px);
+                    &:before, &:after{
+
+                    }
+                    &:before{
+                        width: 29px;
+                        height: 4px;
+                        top: 26px;
+                        left: 13px;
+                    }
+                    &:after{
+                        width: 4px;
+                        height: 29px;
+                        top: 14px;
+                        left: 26px;
+                    }
+                    &.reverse_color{
+                        border: 2px solid #FFF;
+                        background-color: #FFF;
+                        &:before, &:after{
+                            background-color: $main_color;   
+                        }
+                    }
+                }
+                &.other{
+                    background-color: #FFF;
+                    border: 2px solid $main_color;
+                    &:before, &:after{
+                        background-color: $main_color;
+                    }
+                    &:before{
+                        width: 29px;
+                        height: 4px;
+                        top: 20px;
+                        left: 13px;
+                    }
+                    &:after{
+                        width: 29px;
+                        height: 4px;
+                        top: 36px;
+                        left: 13px;
+                    }
+                    &.reverse_color{
+                        background-color: $main_color;
+                        border-color: #FFF;
+                        &:before, &:after{
+                            background-color: #FFF;   
+                        }
+                    }
+                    &.close{
+                        &:before{
+                            animation: icon_beforeTag .3s 0s alternate forwards linear;
+                            // top: 27px;
+                            // transform: rotateZ(45deg);
+                        } 
+                        &:after{
+                            animation: icon_afterTag .3s 0s alternate forwards linear;
+                            // top: 27px;
+                            // transform: rotateZ(-45deg);
+                        }
+                    }
+                }
+                &:before, &:after{
+                    content: '';
+                    position: absolute;
+                    display: inline-block;
+                    background-color: #FFF;
+                    border-radius: 2px;
+                }
+                &:before{
+                    
+                }
+                &:after{
+                    
+                }
+            }
+        }
+    }
+}
